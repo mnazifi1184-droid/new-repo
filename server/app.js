@@ -9,8 +9,9 @@ import { initializeDatabase } from './database/db.js';
 import { createUserRepository } from './database/repositories/user.repository.js';
 import { createSessionRepository } from './database/repositories/session.repository.js';
 import { createUserRouter } from './routes/user.routes.js';
+import { createAdminRouter } from './routes/admin.routes.js';
+import { createUserController } from './controllers/user.controller.js';
 
-// Load environment variables from .env.
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,25 +21,22 @@ const rootDir = path.resolve(__dirname, '..');
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
-// Core middleware.
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(rootDir, 'client')));
 
-// Initialize SQLite and connect repositories.
 const db = initializeDatabase();
 const userRepository = createUserRepository(db);
 const sessionRepository = createSessionRepository(db);
 
-// Authentication service.
 const authService = createAuthService({
   userRepository,
   sessionRepository
 });
 
 const authController = createAuthController(authService);
+const userController = createUserController({ userRepository });
 
-// Health endpoint for development and deployment checks.
 app.get('/api/health', (req, res) => {
   res.json({
     success: true,
@@ -47,21 +45,22 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Authentication API.
 app.use('/api/auth', createAuthRouter(authController));
 
-// Protected user API.
 app.use('/api/users', createUserRouter({
   sessionRepository,
   userRepository
 }));
 
-// Frontend entry point.
+app.use('/api/admin', createAdminRouter({
+  sessionRepository,
+  userController
+}));
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(rootDir, 'client', 'index.html'));
 });
 
-// API 404 response.
 app.use('/api', (req, res) => {
   res.status(404).json({
     success: false,
@@ -69,7 +68,6 @@ app.use('/api', (req, res) => {
   });
 });
 
-// Generic error handler.
 app.use((err, req, res, next) => {
   console.error(err);
 
