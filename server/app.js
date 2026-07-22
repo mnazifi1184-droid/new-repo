@@ -8,6 +8,7 @@ import { createAuthService } from './services/auth.service.js';
 import { initializeDatabase } from './database/db.js';
 import { createUserRepository } from './database/repositories/user.repository.js';
 import { createSessionRepository } from './database/repositories/session.repository.js';
+import { createUserRouter } from './routes/user.routes.js';
 
 // Load environment variables from .env.
 dotenv.config();
@@ -48,6 +49,12 @@ app.get('/api/health', (req, res) => {
 
 // Authentication API.
 app.use('/api/auth', createAuthRouter(authController));
+
+// Protected user API.
+app.use('/api/users', createUserRouter({
+  sessionRepository,
+  userRepository
+}));
 
 // Frontend entry point.
 app.get('/', (req, res) => {
