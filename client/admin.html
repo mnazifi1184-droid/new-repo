@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel | Inventory Management</title>
+  <link rel="stylesheet" href="/css/dashboard.css" />
+  <style>
+    .admin-shell { width: min(100%, 1100px); }
+    .table-wrap { overflow-x: auto; margin-top: 24px; }
+    table { width: 100%; border-collapse: collapse; min-width: 720px; }
+    th, td { padding: 14px; border-bottom: 1px solid #eaecf0; text-align: left; }
+    th { color: #667085; font-size: .85rem; }
+    select { padding: 8px 10px; border: 1px solid #d0d5dd; border-radius: 8px; }
+    .status-badge { display: inline-block; padding: 5px 9px; border-radius: 999px; font-size: .8rem; font-weight: 700; }
+    .status-active { background: #ecfdf3; color: #027a48; }
+    .status-inactive { background: #fef3f2; color: #b42318; }
+    .admin-action { padding: 8px 12px; border: 1px solid #d0d5dd; background: #fff; border-radius: 8px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <strong>Inventory Management</strong>
+      <span>Admin Panel</span>
+    </div>
+    <button id="logoutButton" type="button">Logout</button>
+  </header>
+
+  <main class="dashboard-shell">
+    <section class="dashboard-card admin-shell">
+      <span class="eyebrow">Administration</span>
+      <h1>User Management</h1>
+      <p>Manage user roles and account status.</p>
+      <p id="adminMessage" class="status-message" aria-live="polite"></p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Username</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="/js/admin.js"></script>
+</body>
+</html>
