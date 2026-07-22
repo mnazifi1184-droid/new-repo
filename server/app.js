@@ -2,9 +2,12 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createAuthRouter } from './routes/auth.routes.js';
+import { createAuthController } from './controllers/auth.controller.js';
+import { createAuthService } from './services/auth.service.js';
+import { initializeDatabase } from './database/db.js';
 
-// Load environment variables from .env
-// This replaces configuration that was previously handled by Apps Script deployment settings.
+// Load environment variables from .env.
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -14,12 +17,36 @@ const rootDir = path.resolve(__dirname, '..');
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
-// Core middleware
+// Core middleware.
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Serve the frontend as static files.
 app.use(express.static(path.join(rootDir, 'client')));
+
+// Initialize the database infrastructure.
+initializeDatabase();
+
+// Authentication dependencies will be connected to the SQLite repositories
+// in the next database implementation step.
+const authService = createAuthService({
+  userRepository: {
+    async findByUsername() {
+      throw new Error('User repository is not connected yet.');
+    },
+    async create() {
+      throw new Error('User repository is not connected yet.');
+    }
+  },
+  sessionRepository: {
+    async create() {
+      throw new Error('Session repository is not connected yet.');
+    },
+    async deleteByTokenHash() {
+      throw new Error('Session repository is not connected yet.');
+    }
+  }
+});
+
+const authController = createAuthController(authService);
 
 // Health endpoint for development and deployment checks.
 app.get('/api/health', (req, res) => {
@@ -30,12 +57,15 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Authentication API.
+app.use('/api/auth', createAuthRouter(authController));
+
 // Frontend entry point.
 app.get('/', (req, res) => {
   res.sendFile(path.join(rootDir, 'client', 'index.html'));
 });
 
-// Temporary 404 response. API routes will be added in later commits.
+// API 404 response.
 app.use('/api', (req, res) => {
   res.status(404).json({
     success: false,
@@ -49,7 +79,7 @@ app.use((err, req, res, next) => {
 
   res.status(500).json({
     success: false,
-    message: 'Internal server error.'
+    message: err.message || 'Internal server error.'
   });
 });
 
