@@ -15,7 +15,6 @@ export function createSessionRepository(db) {
           s.token_hash,
           s.expires_at,
           s.created_at,
-          u.id AS user_id,
           u.full_name,
           u.username,
           u.role,
