@@ -1,17 +1,6 @@
 const sessionToken = localStorage.getItem('sessionToken');
-const storedUser = localStorage.getItem('userInfo');
 
-if (!sessionToken || !storedUser) {
-  window.location.href = '/login.html';
-}
-
-let user;
-
-try {
-  user = JSON.parse(storedUser);
-} catch {
-  localStorage.removeItem('sessionToken');
-  localStorage.removeItem('userInfo');
+if (!sessionToken) {
   window.location.href = '/login.html';
 }
 
@@ -22,11 +11,33 @@ const userRoleCard = document.querySelector('#userRoleCard');
 const dashboardMessage = document.querySelector('#dashboardMessage');
 const logoutButton = document.querySelector('#logoutButton');
 
-if (user) {
-  userName.textContent = user.fullName || user.username;
-  userUsername.textContent = user.username;
-  userRole.textContent = user.role;
-  userRoleCard.textContent = user.role;
+async function loadCurrentUser() {
+  try {
+    const response = await fetch('/api/users/me', {
+      headers: {
+        Authorization: `Bearer ${sessionToken}`
+      }
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || 'Session is invalid.');
+    }
+
+    const user = data.user;
+
+    localStorage.setItem('userInfo', JSON.stringify(user));
+    userName.textContent = user.fullName || user.username;
+    userUsername.textContent = user.username;
+    userRole.textContent = user.role;
+    userRoleCard.textContent = user.role;
+  } catch (error) {
+    console.error('Current user error:', error);
+    localStorage.removeItem('sessionToken');
+    localStorage.removeItem('userInfo');
+    window.location.href = '/login.html';
+  }
 }
 
 logoutButton?.addEventListener('click', async () => {
@@ -48,3 +59,5 @@ logoutButton?.addEventListener('click', async () => {
     window.location.href = '/login.html';
   }
 });
+
+loadCurrentUser();
