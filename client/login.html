@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Inventory Management</title>
+  <link rel="stylesheet" href="/css/auth.css" />
+</head>
+<body>
+  <main class="auth-shell">
+    <section class="auth-card">
+      <div class="auth-header">
+        <span class="eyebrow">Inventory Management</span>
+        <h1>Welcome back</h1>
+        <p>Sign in to access your inventory workspace.</p>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" autocomplete="username" required />
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required />
+
+        <button type="submit" class="primary-button">Sign In</button>
+        <p id="loginMessage" class="form-message" aria-live="polite"></p>
+      </form>
+
+      <p class="auth-footer">
+        Don't have an account?
+        <a href="/signup.html">Create one</a>
+      </p>
+    </section>
+  </main>
+
+  <script type="module" src="/js/auth.js"></script>
+</body>
+</html>
