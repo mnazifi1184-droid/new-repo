@@ -29,6 +29,34 @@ export function createUserRepository(db) {
         WHERE id = ?
         LIMIT 1
       `).get(id);
+    },
+
+    findAll() {
+      return db.prepare(`
+        SELECT id, full_name, username, role, is_active, created_at, updated_at
+        FROM users
+        ORDER BY created_at DESC, id DESC
+      `).all();
+    },
+
+    updateRole(id, role) {
+      db.prepare(`
+        UPDATE users
+        SET role = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).run(role, id);
+
+      return this.findById(id);
+    },
+
+    updateStatus(id, isActive) {
+      db.prepare(`
+        UPDATE users
+        SET is_active = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).run(isActive ? 1 : 0, id);
+
+      return this.findById(id);
     }
   };
 }
