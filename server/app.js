@@ -6,6 +6,8 @@ import { createAuthRouter } from './routes/auth.routes.js';
 import { createAuthController } from './controllers/auth.controller.js';
 import { createAuthService } from './services/auth.service.js';
 import { initializeDatabase } from './database/db.js';
+import { createUserRepository } from './database/repositories/user.repository.js';
+import { createSessionRepository } from './database/repositories/session.repository.js';
 
 // Load environment variables from .env.
 dotenv.config();
@@ -22,28 +24,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(rootDir, 'client')));
 
-// Initialize the database infrastructure.
-initializeDatabase();
+// Initialize SQLite and connect repositories.
+const db = initializeDatabase();
+const userRepository = createUserRepository(db);
+const sessionRepository = createSessionRepository(db);
 
-// Authentication dependencies will be connected to the SQLite repositories
-// in the next database implementation step.
+// Authentication service.
 const authService = createAuthService({
-  userRepository: {
-    async findByUsername() {
-      throw new Error('User repository is not connected yet.');
-    },
-    async create() {
-      throw new Error('User repository is not connected yet.');
-    }
-  },
-  sessionRepository: {
-    async create() {
-      throw new Error('Session repository is not connected yet.');
-    },
-    async deleteByTokenHash() {
-      throw new Error('Session repository is not connected yet.');
-    }
-  }
+  userRepository,
+  sessionRepository
 });
 
 const authController = createAuthController(authService);
@@ -83,6 +72,18 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Inventory Management server running on http://localhost:${PORT}`);
 });
+
+function shutdown(signal) {
+  console.log(`${signal} received. Shutting down gracefully...`);
+
+  server.close(() => {
+    db.close();
+    process.exit(0);
+  });
+}
+
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
