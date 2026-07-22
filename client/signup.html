@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up | Inventory Management</title>
+  <link rel="stylesheet" href="/css/auth.css" />
+</head>
+<body>
+  <main class="auth-shell">
+    <section class="auth-card">
+      <div class="auth-header">
+        <span class="eyebrow">Inventory Management</span>
+        <h1>Create account</h1>
+        <p>Register a new user account.</p>
+      </div>
+
+      <form id="signupForm" novalidate>
+        <label for="fullName">Full name</label>
+        <input id="fullName" name="fullName" type="text" autocomplete="name" required />
+
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" autocomplete="username" required />
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required />
+
+        <label for="confirmPassword">Confirm password</label>
+        <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" minlength="8" required />
+
+        <button type="submit" class="primary-button">Create Account</button>
+        <p id="signupMessage" class="form-message" aria-live="polite"></p>
+      </form>
+
+      <p class="auth-footer">
+        Already have an account?
+        <a href="/login.html">Sign in</a>
+      </p>
+    </section>
+  </main>
+
+  <script type="module" src="/js/auth.js"></script>
+</body>
+</html>
