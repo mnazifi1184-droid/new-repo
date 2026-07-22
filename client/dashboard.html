@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | Inventory Management</title>
+  <link rel="stylesheet" href="/css/dashboard.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <strong>Inventory Management</strong>
+      <span id="userRole"></span>
+    </div>
+    <button id="logoutButton" type="button">Logout</button>
+  </header>
+
+  <main class="dashboard-shell">
+    <section class="dashboard-card">
+      <span class="eyebrow">Dashboard</span>
+      <h1>Welcome, <span id="userName">User</span></h1>
+      <p>Your authenticated session is active.</p>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <span>Username</span>
+          <strong id="userUsername">-</strong>
+        </div>
+        <div class="info-item">
+          <span>Role</span>
+          <strong id="userRoleCard">-</strong>
+        </div>
+      </div>
+
+      <p id="dashboardMessage" class="status-message" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <script type="module" src="/js/dashboard.js"></script>
+</body>
+</html>
