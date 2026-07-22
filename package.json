@@ -6,18 +6,21 @@
   "main": "server/app.js",
   "scripts": {
     "start": "node server/app.js",
-    "dev": "node --watch server/app.js"
+    "dev": "node --watch server/app.js",
+    "seed:admin": "node server/database/seed.js"
   },
   "keywords": [
     "inventory",
     "javascript",
     "nodejs",
     "express",
+    "sqlite",
     "excel"
   ],
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "better-sqlite3": "^12.4.1",
     "dotenv": "^16.6.1",
     "express": "^5.1.0"
   }
