@@ -1,77 +1,41 @@
-# Inventory Management
+# Inventory Management — Google Apps Script
 
-A modular inventory management system being migrated from Google Apps Script to JavaScript and Node.js.
+This repository is being migrated from the original project export to a modular Google Apps Script + Google Sheets architecture.
 
-## Current Architecture
+## Stack
 
-- **Frontend:** HTML, CSS, JavaScript ES Modules
-- **Backend:** Node.js + Express
-- **Database:** Planned for a later commit
-- **Excel Processing:** Planned for a later commit
-- **Authentication:** Planned for a later commit
+- Google Apps Script (V8)
+- Google Sheets as database
+- HTML / CSS / JavaScript frontend
+- Google Drive / Advanced Drive Service for Excel workflows
 
-## Project Structure
+## Original project modules
 
-```text
-.
-├── client/
-│   ├── index.html
-│   ├── css/
-│   │   └── style.css
-│   └── js/
-│       └── app.js
-├── server/
-│   └── app.js
-├── .env.example
-├── .gitignore
-├── package.json
-└── README.md
-```
+- `Code.gs` — authentication, sessions, sheet operations, Excel upload, merge logic
+- `Styles.html` — shared styles
+- `Common.html` — shared client utilities
+- `Login.html` — login page
+- `Signup.html` — registration page
+- `Dashboard.html` — dashboard
+- `Upload.html` — Excel upload and preview
+- `View.html` — sheet data viewer
+- `Merge.html` — sheet merge and template workflows
 
-## Run Locally
+## Development direction
 
-Install dependencies:
+The original exported project is the source of truth. The Node.js/Express prototype is no longer the development target.
 
-```bash
-npm install
-```
+Planned evolution:
 
-Create a local environment file from `.env.example` and configure the port if needed.
+1. Import the original source files without losing functionality.
+2. Split server-side code into modular `.gs` services.
+3. Split client-side JavaScript into reusable modules.
+4. Keep Google Sheets as the initial database.
+5. Add authentication, roles, permissions, Excel upload, column mapping, merge workflows, inventory, purchasing, sales, and reporting.
+6. Deploy as a Google Apps Script Web App.
 
-Start the application:
+## Deployment
 
-```bash
-npm start
-```
+The web app configuration is defined in `appsscript.json`.
 
-For development with Node.js watch mode:
-
-```bash
-npm run dev
-```
-
-Open:
-
-```text
-http://localhost:3000
-```
-
-## API Health Check
-
-```text
-GET /api/health
-```
-
-## Development Roadmap
-
-1. Project initialization
-2. Authentication and Login/Signup
-3. Session management and roles
-4. Dashboard
-5. Excel upload
-6. Excel preview and column selection
-7. Data management
-8. Merge engine
-9. Saved merge templates
-10. Admin panel
-11. Inventory management modules
+For production deployment, configure the Apps Script project with the required Google Sheet ID and Advanced Drive Service settings, then deploy as a Web App.
